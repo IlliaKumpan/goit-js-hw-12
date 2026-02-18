@@ -1,6 +1,6 @@
 // import axios from "axios";  
 import getImagesByQuery from "./js/pixabay-api.js";
-import { createGallery, clearGallery, showLoader, hideLoader } from "./js/render-functions.js";
+import { createGallery, clearGallery, showLoader, hideLoader, showLoadMoreButton, hideLoadMoreButton } from "./js/render-functions.js";
 
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
@@ -11,6 +11,7 @@ import "izitoast/dist/css/iziToast.min.css";
 
 const searchForm = document.querySelector('.form');
 
+
 searchForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   
@@ -20,8 +21,9 @@ searchForm.addEventListener('submit', async (event) => {
     iziToast.warning({ message: "Search field cannot be empty!" });
     return;
   }
-  clearGallery(); 
-  showLoader();
+    clearGallery();
+    hideLoadMoreButton();
+    showLoader();
 
   try {
     const data = await getImagesByQuery(query);
@@ -33,7 +35,8 @@ searchForm.addEventListener('submit', async (event) => {
         position: 'topRight'
       });
     } else {
-      createGallery(data.hits);
+        createGallery(data.hits);
+        showLoadMoreButton();
     }
   } catch (error) {
     iziToast.error({ message: "Something went wrong. Please try again." });
@@ -42,3 +45,7 @@ searchForm.addEventListener('submit', async (event) => {
     event.target.reset(); // Очищення форми
   }
 });
+
+
+ 
+

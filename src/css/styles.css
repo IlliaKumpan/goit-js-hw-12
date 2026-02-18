@@ -26,7 +26,7 @@
 
 }
 
-.form button {
+.btn {
     border-radius: 8px;
     padding: 8px 16px;
     border-color: transparent;
@@ -41,10 +41,19 @@
     color: #fff;
 }
 
-.form button:hover {
+.btn:hover {
     background: #6c8cff;
 }
-
+#load-btn{
+    margin: 0 auto;
+    padding: 12px 24px;
+    width: 125px;
+    height: 40px;
+    visibility: hidden;
+}
+#load-btn.is-open{
+    visibility: visible;
+}
 
 .loader {
     margin: 0 auto;
@@ -86,10 +95,9 @@
     gap: 24px;
     width: 1128px;
     margin: 0 auto;
+    margin-bottom: 32px;
 }
-.gallery-link {
-    
-}
+
 .gallery-link img {
     display: block;
     width: 360px;

@@ -3,6 +3,7 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 
 const galleryElement = document.querySelector('.gallery');
 const loader = document.querySelector('.loader');
+const fetchPostsBtn = document.querySelector('#load-btn');
 
 
 let lightbox = new SimpleLightbox('.gallery a', {
@@ -10,8 +11,7 @@ let lightbox = new SimpleLightbox('.gallery a', {
   captionDelay: 250,
 });
 
-export function createGallery(images) {
-  // Розмітка картки згідно з вимогами (webformatURL, largeImageURL, tags, likes і т.д.)
+export async function createGallery(images) {
   const markup = images.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
     return `
       <li class="gallery-item">
@@ -37,12 +37,20 @@ export function clearGallery() {
 
 export function showLoader() {
   if (loader) {
-    loader.classList.add('is-open'); // Додаємо клас для відображення
+    loader.classList.add('is-open'); 
   }
 }
 
 export function hideLoader() {
   if (loader) {
-    loader.classList.remove('is-open'); // Видаляємо клас після завершення
+    loader.classList.remove('is-open');
   }
+}
+
+export function showLoadMoreButton() { 
+    fetchPostsBtn.classList.add('is-open');
+}
+
+export function hideLoadMoreButton() { 
+    fetchPostsBtn.classList.remove('is-open');
 }
