@@ -16,20 +16,25 @@ let page = 1;
 
 
 fetchPostsBtn.addEventListener('click', async () => {
+    hideLoadMoreButton();
     try {
     page += 1;
+    
     const data = await getImagesByQuery(query, page,);
     createGallery(data.hits);
         page += 1;
         const galleryItem = document.querySelector(".gallery-item");
         const cardHeight = galleryItem.getBoundingClientRect().height;
         window.scrollBy({
-        top: cardHeight * 3,
+        top: cardHeight * 2,
         behavior: "smooth",});
 
-    if (page > 1) {
-        fetchPostsBtn.textContent = "Load more";
-        
+   const totalPages = Math.ceil(data.totalHits / 15);
+        if (page >= totalPages) {
+            hideLoadMoreButton();
+            iziToast.info({ message: "We're sorry, but you've reached the end of search results." });
+        } else {
+            showLoadMoreButton();
         }
       
   } catch (error) {
@@ -45,32 +50,39 @@ searchForm.addEventListener('submit', async (event) => {
   if (!query) {
     iziToast.warning({ message: "Search field cannot be empty!" });
     return;
-  }
+    }
+    page = 1;
     clearGallery();
     hideLoadMoreButton();
     showLoader();
 
+
   try {
-      const data = await getImagesByQuery(query, page);
+        const data = await getImagesByQuery(query, page);
 
-    // Якщо бекенд повернув порожній масив
-    if (data.hits.length === 0) {
-      iziToast.error({
-        message: "Sorry, there are no images matching your search query. Please try again!",
-        position: 'topRight'
-      });
-    } else {
-        createGallery(data.hits);
-        showLoadMoreButton();
-      }
+        if (data.hits.length === 0) {
+            iziToast.error({
+                message: "Sorry, there are no images matching your search query. Please try again!",
+                position: 'topRight'
+            });
+        } else {
+            createGallery(data.hits);
+            
+    
+            const totalPages = Math.ceil(data.totalHits / 15);
+            if (page < totalPages) {
+                showLoadMoreButton();
+            } else {
+                iziToast.info({ message: "We're sorry, but you've reached the end of search results." });
+            }
+        }
   } catch (error) {
-    iziToast.error({ message: "Something went wrong. Please try again." });
-  } finally {
-    hideLoader();
-    event.target.reset(); // Очищення форми
-  }
+    console.log(error);
+        iziToast.error({ message: "Something went wrong. Please try again." });
+    } finally {
+        hideLoader();
+        event.target.reset();
+    }
 });
-
-
  
 
