@@ -18,9 +18,9 @@ let page = 1;
 fetchPostsBtn.addEventListener('click', async () => {
     hideLoadMoreButton();
     showLoader();
-    page += 1;
-    try {
     
+    try {
+    page += 1;  
     const data = await getImagesByQuery(query, page,);
     createGallery(data.hits);
         const galleryItem = document.querySelector(".gallery-item");
@@ -81,7 +81,7 @@ searchForm.addEventListener('submit', async (event) => {
   } catch (error) {
     console.log(error);
         iziToast.error({ message: "Something went wrong. Please try again." });
-    } finally {
+  } finally {
         hideLoader();
         event.target.reset();
     }
