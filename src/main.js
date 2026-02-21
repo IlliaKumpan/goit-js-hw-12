@@ -17,8 +17,8 @@ let page = 1;
 
 fetchPostsBtn.addEventListener('click', async () => {
     hideLoadMoreButton();
+    showLoader();
     try {
-    page += 1;
     
     const data = await getImagesByQuery(query, page,);
     createGallery(data.hits);
@@ -37,9 +37,11 @@ fetchPostsBtn.addEventListener('click', async () => {
             showLoadMoreButton();
         }
       
-  } catch (error) {
+    } catch (error) {
+    iziToast.error({ message: "Error fetching images!" });
     console.log(error);
-  }
+    }
+    finally { hideLoader(); }
 });
 
 searchForm.addEventListener('submit', async (event) => {
