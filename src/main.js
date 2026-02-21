@@ -18,11 +18,11 @@ let page = 1;
 fetchPostsBtn.addEventListener('click', async () => {
     hideLoadMoreButton();
     showLoader();
+    page += 1;
     try {
     
     const data = await getImagesByQuery(query, page,);
     createGallery(data.hits);
-        page += 1;
         const galleryItem = document.querySelector(".gallery-item");
         const cardHeight = galleryItem.getBoundingClientRect().height;
         window.scrollBy({
