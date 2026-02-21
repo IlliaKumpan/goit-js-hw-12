@@ -1,21 +1,46 @@
 // import axios from "axios";  
 import getImagesByQuery from "./js/pixabay-api.js";
-import { createGallery, clearGallery, showLoader, hideLoader, showLoadMoreButton, hideLoadMoreButton } from "./js/render-functions.js";
+import { createGallery, clearGallery, showLoader, hideLoader, showLoadMoreButton, hideLoadMoreButton, } from "./js/render-functions.js";
 
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
-// import SimpleLightbox from "simplelightbox";
-// import "simplelightbox/dist/simple-lightbox.min.css";
 
 
 
+
+const fetchPostsBtn = document.querySelector('#load-btn');
 const searchForm = document.querySelector('.form');
+let query = "";
+let page = 1;
 
+
+
+fetchPostsBtn.addEventListener('click', async () => {
+    try {
+    page += 1;
+    const data = await getImagesByQuery(query, page,);
+    createGallery(data.hits);
+        page += 1;
+        const galleryItem = document.querySelector(".gallery-item");
+        const cardHeight = galleryItem.getBoundingClientRect().height;
+        window.scrollBy({
+        top: cardHeight * 3,
+        behavior: "smooth",});
+
+    if (page > 1) {
+        fetchPostsBtn.textContent = "Load more";
+        
+        }
+      
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 searchForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   
-  const query = event.currentTarget.elements['search-text'].value.trim();
+   query = event.currentTarget.elements['search-text'].value.trim();
   
   if (!query) {
     iziToast.warning({ message: "Search field cannot be empty!" });
@@ -26,7 +51,7 @@ searchForm.addEventListener('submit', async (event) => {
     showLoader();
 
   try {
-    const data = await getImagesByQuery(query);
+      const data = await getImagesByQuery(query, page);
 
     // Якщо бекенд повернув порожній масив
     if (data.hits.length === 0) {
@@ -37,7 +62,7 @@ searchForm.addEventListener('submit', async (event) => {
     } else {
         createGallery(data.hits);
         showLoadMoreButton();
-    }
+      }
   } catch (error) {
     iziToast.error({ message: "Something went wrong. Please try again." });
   } finally {

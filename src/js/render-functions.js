@@ -1,6 +1,5 @@
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css"; 
-
 const galleryElement = document.querySelector('.gallery');
 const loader = document.querySelector('.loader');
 const fetchPostsBtn = document.querySelector('#load-btn');
@@ -10,6 +9,7 @@ let lightbox = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
   captionDelay: 250,
 });
+
 
 export async function createGallery(images) {
   const markup = images.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
@@ -30,6 +30,7 @@ export async function createGallery(images) {
   galleryElement.insertAdjacentHTML('beforeend', markup);
   lightbox.refresh();
 }
+
 
 export function clearGallery() {
   galleryElement.innerHTML = ''; 
